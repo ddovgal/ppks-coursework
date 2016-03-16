@@ -1,16 +1,22 @@
-package util;
+package ua.ddovgal.ppksCoursework.util;
 
 public class Operations {
 
-    private int N;
-    private int H;
+    private static int N;
+    private static int P;
+    private static int H;
 
     public Operations(int N, int P) {
-        this.N = N;
+        Operations.N = N;
+        Operations.P = P;
         H = N / P;
     }
 
-    public int[][] createMatrix(int num) {
+    public static int getN() {
+        return N;
+    }
+
+    public static int[][] createMatrix(int num) {
         int[][] newMatrix = new int[N][N];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -20,7 +26,7 @@ public class Operations {
         return newMatrix;
     }
 
-    public int[] createVector(int num) {
+    public static int[] createVector(int num) {
         int[] newVector = new int[N];
         for (int i = 0; i < N; i++) {
             newVector[i] = num;
@@ -28,28 +34,28 @@ public class Operations {
         return newVector;
     }
 
-    public void printMatrix(int[][] matrix) {
+    public static void printMatrix(int[][] matrix) {
         if (N > 6) return;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                System.out.print(matrix[i][j]);
+                System.out.print(matrix[i][j] + " ");
             }
             System.out.println();
         }
     }
 
-    public void copyMatrix(int[][] matrixSource, int[][] destMatrix) {
+    public static void copyMatrix(int[][] matrixSource, int[][] destMatrix) {
         for (int i = 0; i < N; i++) {
             System.arraycopy(matrixSource[i], 0, destMatrix[i], 0, N);
         }
     }
 
-    public int[][] multiMatrix(int processNum, int[][] matrix1, int[][] matrix2) {
+    public static int[][] multiMatrix(int processNum, int[][] matrix1, int[][] matrix2) {
         int[][] resMatrix = new int[N][N];
 
         int start = (processNum - 1) * H;
         int end = processNum * H;
-        if (processNum == 4) {
+        if (processNum == P) {
             end = N;
         }
 
@@ -63,38 +69,26 @@ public class Operations {
         return resMatrix;
     }
 
-    public int minOfVector(int processNum, int[] vector) {
+    public static int minOfMatrix(int processNum, int[][] matrix) {
         int start = (processNum - 1) * H;
         int end = processNum * H;
-        if (processNum == 4) {
+        if (processNum == P) {
             end = N;
         }
 
         int rez = Integer.MAX_VALUE;
         for (int i = start; i < end; i++) {
-            if (vector[i] < rez) rez = vector[i];
+            for (int j = 0; j < N; j++) {
+                if (matrix[i][j] < rez) rez = matrix[i][j];
+            }
         }
         return rez;
     }
 
-    public int maxOfVector(int processNum, int[] vector) {
+    public static void multiMatrixConst(int processNum, int[][] matrix, int constant) {
         int start = (processNum - 1) * H;
         int end = processNum * H;
-        if (processNum == 4) {
-            end = N;
-        }
-
-        int rez = 0;
-        for (int i = start; i < end; i++) {
-            if (vector[i] > rez) rez = vector[i];
-        }
-        return rez;
-    }
-
-    public void multiMatrixConst(int processNum, int[][] matrix, int constant) {
-        int start = (processNum - 1) * H;
-        int end = processNum * H;
-        if (processNum == 4) {
+        if (processNum == P) {
             end = N;
         }
 
@@ -105,16 +99,16 @@ public class Operations {
         }
     }
 
-    public void addMatrix(int processNum, int[][] rezMatrix, int[][] matrix2) {
+    public static void addMatrix(int processNum, int[][] rezMatrix, int[][] left, int[][] right) {
         int start = (processNum - 1) * H;
         int end = processNum * H;
-        if (processNum == 4) {
+        if (processNum == P) {
             end = N;
         }
 
         for (int i = start; i < end; i++) {
             for (int j = 0; j < N; j++) {
-                rezMatrix[i][j] += matrix2[i][j];
+                rezMatrix[i][j] = left[i][j] + right[i][j];
             }
         }
     }
